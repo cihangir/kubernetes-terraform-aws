@@ -88,11 +88,9 @@ resource "aws_launch_configuration" "cluster" {
   user_data                   = "${template_file.cloud_init.rendered}"
   enable_monitoring           = "${var.enable_monitoring}"
 
-  /*
-      lifecycle {
-        create_before_destroy = true
-      }
-      */
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_autoscaling_group" "cluster" {
