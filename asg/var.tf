@@ -55,7 +55,7 @@ variable "min_cluster_size" {
 
 variable "availability_zones" {
   description = "AWS Region based AZs"
-  default     = "sa-east-1a,sa-east-1b"
+  default     = "sa-east-1a,sa-east-1b,sa-east-1c"
 }
 
 variable "health_check_grace_period" {

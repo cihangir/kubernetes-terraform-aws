@@ -9,7 +9,7 @@ variable "region" {
 
 variable "availability_zones" {
   description = "AWS Region based AZs"
-  default     = "sa-east-1a,sa-east-1b"
+  default     = "sa-east-1a,sa-east-1b,sa-east-1c"
 }
 
 variable "ssh_public_key" {
