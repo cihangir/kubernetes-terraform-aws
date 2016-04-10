@@ -9,11 +9,6 @@ variable "region" {
   default     = "sa-east-1"
 }
 
-variable "cloud_init_template_path" {
-  description = "Path to the cloud init file template"
-  default     = "../cloud_init.yml.tpl"
-}
-
 variable "desired_cluster_size" {
   description = "Desired number of servers to run in this cluster"
   default     = 2
@@ -71,6 +66,11 @@ variable "health_check_grace_period" {
 variable "health_check_type" {
   description = "EC2 or ELB. Controls how health checking is done."
   default     = "EC2"
+}
+
+variable "rendered_cloud_init" {
+  description = "Rendered cloud init data"
+  default     = ""
 }
 
 # prefixes

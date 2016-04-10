@@ -1,14 +1,3 @@
-# Template file for cloud init info
-resource "template_file" "cloud_init" {
-  template = "${var.cloud_init_template_path}"
-
-  vars {
-    name                 = "${var.name}"
-    region               = "${var.region}"
-    desired_cluster_size = "${var.desired_cluster_size}"
-  }
-}
-
 # This specific role gives access to all resources in AWS
 # TODO(cihangir)  give fine/granular access to roles
 resource "aws_iam_role" "aws_all_role" {
@@ -85,7 +74,7 @@ resource "aws_launch_configuration" "cluster" {
 
   / * security_groups  = "${var.security_groups}" */
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  user_data                   = "${template_file.cloud_init.rendered}"
+  user_data                   = "${var.rendered_cloud_init}"
   enable_monitoring           = "${var.enable_monitoring}"
 
   lifecycle {
@@ -104,7 +93,7 @@ resource "aws_autoscaling_group" "cluster" {
   desired_capacity          = "${var.desired_cluster_size}"
   load_balancers            = ["${compact(split(",", var.load_balancer_names))}"]
   vpc_zone_identifier       = ["${split(",", var.aws_subnet_subnet_ids)}"]
-  metrics_granularity       = "1Minute"                                        /* only 1Minute is valid */
+  metrics_granularity       = "1Minute"                                           /* only 1Minute is valid */
 
   tag {
     key                 = "Name"
