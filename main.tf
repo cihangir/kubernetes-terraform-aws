@@ -14,6 +14,7 @@ module "aws_asg" {
   name                  = "${var.name}"
   aws_subnet_subnet_ids = "${module.aws_vpc.aws_subnet_subnet_ids}"
   key_name              = "${module.aws_vpc.aws_key_name}"
+  load_balancer_names   = "${module.aws_elb.aws_elb_elb_name}"
 }
 
 module "aws_elb" {
