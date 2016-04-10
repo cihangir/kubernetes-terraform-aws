@@ -1,10 +1,14 @@
 resource "aws_key_pair" "cluster" {
-  key_name   = "${var.key_name_prefix}_${var.name}"
+  key_name   = "${var.key_name_prefix}${var.name}"
   public_key = "${var.ssh_public_key}"
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+output "aws_key_name" {
+    value = "${aws_key_pair.cluster.key_name}"
 }
 
 # Create our main VPC in one region
@@ -19,9 +23,13 @@ resource "aws_vpc" "vpc" {
   }
 
   tags {
-    Name    = "${var.vpc_prefix}-${var.name}"
+    Name    = "${var.vpc_prefix}${var.name}"
     project = "${var.name}"
   }
+}
+
+output "aws_vpc_vpc_id" {
+    value = "${aws_vpc.vpc.id}"
 }
 
 #  After creating a VPC, you can add one or more subnets in each Availability
@@ -35,9 +43,13 @@ resource "aws_subnet" "subnet" {
   count                   = "${length(compact(split(",", var.vpc_subnets)))}"
 
   tags {
-    Name    = "${var.subnet_prefix}_${var.name}_${element(split(",", var.availability_zones), count.index)}"
+    Name    = "${var.subnet_prefix}${var.name}_${element(split(",", var.availability_zones), count.index)}"
     project = "${var.name}"
   }
+}
+
+output "aws_subnet_subnet_ids" {
+    value = "${join(",", aws_subnet.subnet.*.id)}"
 }
 
 # By design, each subnet must be associated with a route table, which specifies
@@ -56,9 +68,13 @@ resource "aws_route_table" "rt" {
   propagating_vgws = ["${aws_vpn_gateway.vpn_gw.id}"]
 
   tags {
-    Name    = "${var.aws_route_table_prefix}_${var.name}"
+    Name    = "${var.aws_route_table_prefix}${var.name}"
     project = "${var.name}"
   }
+}
+
+output "aws_route_table_rt_id" {
+    value = "${aws_route_table.rt.id}"
 }
 
 # Create a DHCP Options set
@@ -67,9 +83,13 @@ resource "aws_vpc_dhcp_options" "vpc" {
   domain_name_servers = ["AmazonProvidedDNS"]
 
   tags {
-    Name    = "${var.vpc_dhcp_prefix}-${var.name}"
+    Name    = "${var.vpc_dhcp_prefix}${var.name}"
     project = "${var.name}"
   }
+}
+
+output "aws_vpc_dhcp_options_vpc_id" {
+    value = "${aws_vpc_dhcp_options.vpc.id}"
 }
 
 # Associate DHCP Options set and VPC together
@@ -78,22 +98,34 @@ resource "aws_vpc_dhcp_options_association" "vpc" {
   vpc_id          = "${aws_vpc.vpc.id}"
 }
 
+output "aws_vpc_dhcp_options_association_vpc_id" {
+    value = "${aws_vpc_dhcp_options_association.vpc.id}"
+}
+
 resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name    = "${var.aws_internet_gateway_prefix}_${var.name}"
+    Name    = "${var.aws_internet_gateway_prefix}${var.name}"
     project = "${var.name}"
   }
+}
+
+output "aws_internet_gateway_main_id" {
+    value = "${aws_internet_gateway.main.id}"
 }
 
 resource "aws_vpn_gateway" "vpn_gw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name    = "${var.aws_vpn_gateway_prefix}_${var.name}"
+    Name    = "${var.aws_vpn_gateway_prefix}${var.name}"
     project = "${var.name}"
   }
+}
+
+output "aws_vpn_gateway_vpn_gw_id" {
+    value = "${aws_vpn_gateway.vpn_gw.id}"
 }
 
 resource "aws_route_table_association" "rta" {
@@ -102,42 +134,6 @@ resource "aws_route_table_association" "rta" {
   count          = "${length(compact(split(",", var.vpc_subnets)))}"
 }
 
-resource "aws_security_group" "sec_group" {
-  name        = "${var.aws_security_group_prefix}_${var.name}"
-  description = "Main Security Group for ${var.name}"
-  vpc_id      = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name    = "${var.aws_security_group_prefix}_${var.name}"
-    project = "${var.name}"
-  }
-}
-
-resource "aws_security_group_rule" "allow_ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.sec_group.id}"
-}
-
-# Allow all incoming communication within the cluster
-resource "aws_security_group_rule" "allow_all_cluster" {
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "-1"
-  source_security_group_id = "${aws_security_group.sec_group.id}"
-  security_group_id        = "${aws_security_group.sec_group.id}"
-}
-
-# Allow all outoing communication within the cluster
-resource "aws_security_group_rule" "allow_all_egress" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.sec_group.id}"
+output "aws_route_table_association_rta_id" {
+    value = "${aws_route_table_association.rta.id}"
 }
