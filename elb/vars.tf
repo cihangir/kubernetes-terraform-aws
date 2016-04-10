@@ -21,12 +21,14 @@ variable "aws_elb_instance_port" {
 variable "aws_elb_instance_protocol" {
   description = "(Required) The protocol to use to the instance. "
   default     = "http"
+
   # http, https, tcp, ssl
 }
 
 variable "aws_elb_protocol" {
   description = "(Required) The protocol to listen on."
   default     = "http"
+
   # http, https, tcp, ssl
 }
 
