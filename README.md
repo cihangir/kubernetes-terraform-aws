@@ -12,3 +12,16 @@ With given "name" as your project name,
 
 
 All parameters are configurable but has predefined sane defaults.
+
+
+first run:
+
+```terraform get```
+
+to fix the dependeny management for terraform
+
+then do:
+
+``` terraform apply ```
+
+
