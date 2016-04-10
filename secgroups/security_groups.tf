@@ -30,7 +30,7 @@ output "aws_security_group_rule_allow_ssh_id" {
 resource "aws_security_group_rule" "allow_all_ingress" {
   type                     = "ingress"
   from_port                = 0
-  to_port                  = 65535
+  to_port                  = 0
   protocol                 = "-1"
   source_security_group_id = "${aws_security_group.sec_group.id}"
   security_group_id        = "${aws_security_group.sec_group.id}"
@@ -44,7 +44,7 @@ output "aws_security_group_rule_allow_all_ingress_id" {
 resource "aws_security_group_rule" "allow_all_egress" {
   type              = "egress"
   from_port         = 0
-  to_port           = 65535
+  to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = "${aws_security_group.sec_group.id}"
