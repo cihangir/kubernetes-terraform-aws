@@ -12,7 +12,7 @@ resource "template_file" "cloud_init" {
 # This specific role gives access to all resources in AWS
 # TODO(cihangir)  give fine/granular access to roles
 resource "aws_iam_role" "aws_all_role" {
-  name = "${var.aws_iam_role_prefix}_${var.name}_aws_all"
+  name = "${var.aws_iam_role_prefix}${var.name}_aws_all"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -32,7 +32,7 @@ EOF
 
 # We need to create an instance profile to assign to instances
 resource "aws_iam_instance_profile" "cluster_instance_profile" {
-  name  = "${var.iam_instance_profile_prefix}_${var.name}"
+  name  = "${var.iam_instance_profile_prefix}${var.name}"
   roles = ["${aws_iam_role.aws_all_role.name}"]
 
   provisioner "local-exec" {
@@ -45,7 +45,7 @@ resource "aws_iam_instance_profile" "cluster_instance_profile" {
 }
 
 resource "aws_iam_role_policy" "master" {
-  name = "${var.aws_iam_role_policy_prefix}_${var.name}"
+  name = "${var.aws_iam_role_policy_prefix}${var.name}"
   role = "${aws_iam_role.aws_all_role.name}"
 
   policy = <<EOF
@@ -77,11 +77,11 @@ EOF
 
 # Launch configuration to create a cluster with
 resource "aws_launch_configuration" "cluster" {
-  name                 = "${var.aws_launch_configuration_prefix}_${var.name}_${var.instance_type}"
+  name                 = "${var.aws_launch_configuration_prefix}${var.name}_${var.instance_type}"
   image_id             = "${var.ami_id}"
   instance_type        = "${var.instance_type}"
   iam_instance_profile = "${aws_iam_instance_profile.cluster_instance_profile.name}"
-  key_name             = "${var.key_name_prefix}_${var.name}"
+  key_name             = "${var.key_name}"
 
   / * security_groups  = "${var.security_groups}" */
   associate_public_ip_address = "${var.associate_public_ip_address}"
@@ -96,7 +96,7 @@ resource "aws_launch_configuration" "cluster" {
 }
 
 resource "aws_autoscaling_group" "cluster" {
-  name                      = "${var.aws_autoscaling_group_prefix}_${var.name}"
+  name                      = "${var.aws_autoscaling_group_prefix}${var.name}"
   max_size                  = "${var.max_cluster_size}"
   min_size                  = "${var.min_cluster_size}"
   availability_zones        = ["${split(",", var.availability_zones)}"]
@@ -104,8 +104,8 @@ resource "aws_autoscaling_group" "cluster" {
   health_check_grace_period = "${var.health_check_grace_period}"
   health_check_type         = "${var.health_check_type}"
   desired_capacity          = "${var.desired_cluster_size}"
-  vpc_zone_identifier       = ["${aws_subnet.subnet.*.id}"]
-  metrics_granularity       = "1Minute"                                         /* only 1Minute is valid */
+  vpc_zone_identifier       = ["${split(",", var.aws_subnet_subnet_ids)}"]
+  metrics_granularity       = "1Minute"  /* only 1Minute is valid */
 
   tag {
     key                 = "Name"
