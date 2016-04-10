@@ -19,6 +19,11 @@ variable "desired_cluster_size" {
   default     = 2
 }
 
+variable "load_balancer_names" {
+  description = "(Optional) A list of load balancer names to add to the autoscaling group names."
+  default     = ""
+}
+
 variable "instance_type" {
   description = "AWS Instance type."
   default     = "t2.nano"

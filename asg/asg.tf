@@ -102,6 +102,7 @@ resource "aws_autoscaling_group" "cluster" {
   health_check_grace_period = "${var.health_check_grace_period}"
   health_check_type         = "${var.health_check_type}"
   desired_capacity          = "${var.desired_cluster_size}"
+  load_balancers            = ["${compact(split(",", var.load_balancer_names))}"]
   vpc_zone_identifier       = ["${split(",", var.aws_subnet_subnet_ids)}"]
   metrics_granularity       = "1Minute"                                        /* only 1Minute is valid */
 
