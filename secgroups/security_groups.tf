@@ -9,9 +9,8 @@ resource "aws_security_group" "sec_group" {
   }
 }
 
-
 output "aws_security_group_sec_group_id" {
-    value = "${aws_security_group.sec_group.id}"
+  value = "${aws_security_group.sec_group.id}"
 }
 
 resource "aws_security_group_rule" "allow_ssh" {
@@ -24,7 +23,7 @@ resource "aws_security_group_rule" "allow_ssh" {
 }
 
 output "aws_security_group_rule_allow_ssh_id" {
-    value = "${aws_security_group_rule.allow_ssh.id}"
+  value = "${aws_security_group_rule.allow_ssh.id}"
 }
 
 # Allow all incoming communication within the cluster
@@ -38,9 +37,8 @@ resource "aws_security_group_rule" "allow_all_ingress" {
 }
 
 output "aws_security_group_rule_allow_all_ingress_id" {
-    value = "${aws_security_group_rule.allow_all_ingress.id}"
+  value = "${aws_security_group_rule.allow_all_ingress.id}"
 }
-
 
 # Allow all outoing communication within the cluster
 resource "aws_security_group_rule" "allow_all_egress" {
@@ -53,5 +51,5 @@ resource "aws_security_group_rule" "allow_all_egress" {
 }
 
 output "aws_security_group_rule_allow_all_egress_id" {
-    value = "${aws_security_group_rule.allow_all_egress.id}"
+  value = "${aws_security_group_rule.allow_all_egress.id}"
 }

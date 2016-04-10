@@ -105,7 +105,7 @@ resource "aws_autoscaling_group" "cluster" {
   health_check_type         = "${var.health_check_type}"
   desired_capacity          = "${var.desired_cluster_size}"
   vpc_zone_identifier       = ["${split(",", var.aws_subnet_subnet_ids)}"]
-  metrics_granularity       = "1Minute"  /* only 1Minute is valid */
+  metrics_granularity       = "1Minute"                                        /* only 1Minute is valid */
 
   tag {
     key                 = "Name"

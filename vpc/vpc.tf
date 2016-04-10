@@ -8,7 +8,7 @@ resource "aws_key_pair" "cluster" {
 }
 
 output "aws_key_name" {
-    value = "${aws_key_pair.cluster.key_name}"
+  value = "${aws_key_pair.cluster.key_name}"
 }
 
 # Create our main VPC in one region
@@ -29,7 +29,7 @@ resource "aws_vpc" "vpc" {
 }
 
 output "aws_vpc_vpc_id" {
-    value = "${aws_vpc.vpc.id}"
+  value = "${aws_vpc.vpc.id}"
 }
 
 #  After creating a VPC, you can add one or more subnets in each Availability
@@ -49,7 +49,7 @@ resource "aws_subnet" "subnet" {
 }
 
 output "aws_subnet_subnet_ids" {
-    value = "${join(",", aws_subnet.subnet.*.id)}"
+  value = "${join(",", aws_subnet.subnet.*.id)}"
 }
 
 # By design, each subnet must be associated with a route table, which specifies
@@ -74,7 +74,7 @@ resource "aws_route_table" "rt" {
 }
 
 output "aws_route_table_rt_id" {
-    value = "${aws_route_table.rt.id}"
+  value = "${aws_route_table.rt.id}"
 }
 
 # Create a DHCP Options set
@@ -89,7 +89,7 @@ resource "aws_vpc_dhcp_options" "vpc" {
 }
 
 output "aws_vpc_dhcp_options_vpc_id" {
-    value = "${aws_vpc_dhcp_options.vpc.id}"
+  value = "${aws_vpc_dhcp_options.vpc.id}"
 }
 
 # Associate DHCP Options set and VPC together
@@ -99,7 +99,7 @@ resource "aws_vpc_dhcp_options_association" "vpc" {
 }
 
 output "aws_vpc_dhcp_options_association_vpc_id" {
-    value = "${aws_vpc_dhcp_options_association.vpc.id}"
+  value = "${aws_vpc_dhcp_options_association.vpc.id}"
 }
 
 resource "aws_internet_gateway" "main" {
@@ -112,7 +112,7 @@ resource "aws_internet_gateway" "main" {
 }
 
 output "aws_internet_gateway_main_id" {
-    value = "${aws_internet_gateway.main.id}"
+  value = "${aws_internet_gateway.main.id}"
 }
 
 resource "aws_vpn_gateway" "vpn_gw" {
@@ -125,7 +125,7 @@ resource "aws_vpn_gateway" "vpn_gw" {
 }
 
 output "aws_vpn_gateway_vpn_gw_id" {
-    value = "${aws_vpn_gateway.vpn_gw.id}"
+  value = "${aws_vpn_gateway.vpn_gw.id}"
 }
 
 resource "aws_route_table_association" "rta" {
@@ -135,5 +135,5 @@ resource "aws_route_table_association" "rta" {
 }
 
 output "aws_route_table_association_rta_id" {
-    value = "${aws_route_table_association.rta.id}"
+  value = "${aws_route_table_association.rta.id}"
 }
