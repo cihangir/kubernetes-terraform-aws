@@ -8,3 +8,8 @@ provider "aws" {
   region      = "${var.region}"
   max_retries = 7
 }
+
+variable "region" {
+  description = "AWS Region."
+  default     = "sa-east-1"
+}
