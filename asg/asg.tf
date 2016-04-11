@@ -66,13 +66,12 @@ EOF
 
 # Launch configuration to create a cluster with
 resource "aws_launch_configuration" "cluster" {
-  name                 = "${var.aws_launch_configuration_prefix}${var.name}_${var.instance_type}"
-  image_id             = "${var.ami_id}"
-  instance_type        = "${var.instance_type}"
-  iam_instance_profile = "${aws_iam_instance_profile.cluster_instance_profile.name}"
-  key_name             = "${var.key_name}"
-
-  / * security_groups  = "${var.security_groups}" */
+  name_prefix                 = "${var.aws_launch_configuration_prefix}${var.name}_${var.instance_type}"
+  image_id                    = "${var.ami_id}"
+  instance_type               = "${var.instance_type}"
+  iam_instance_profile        = "${aws_iam_instance_profile.cluster_instance_profile.name}"
+  key_name                    = "${var.key_name}"
+  security_groups             = ["${split(",", var.security_groups)}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
   user_data                   = "${var.rendered_cloud_init}"
   enable_monitoring           = "${var.enable_monitoring}"

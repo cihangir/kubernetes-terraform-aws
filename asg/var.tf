@@ -68,6 +68,11 @@ variable "health_check_type" {
   default     = "EC2"
 }
 
+variable "security_groups" {
+  description = "EC2 or ELB. Controls how health checking is done."
+  default     = ""
+}
+
 variable "rendered_cloud_init" {
   description = "Rendered cloud init data"
   default     = ""
