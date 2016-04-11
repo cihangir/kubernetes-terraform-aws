@@ -29,6 +29,18 @@ resource "aws_elb" "elb" {
     ssl_certificate_id = "${var.aws_elb_ssl_certificate_id}"
   }
 
+  listener {
+    instance_port = "${var.aws_elb_instance_port_2}"
+
+    instance_protocol = "${var.aws_elb_instance_protocol_2}"
+
+    lb_port = "${var.aws_elb_port_2}"
+
+    lb_protocol = "${var.aws_elb_protocol_2}"
+
+    ssl_certificate_id = "${var.aws_elb_ssl_certificate_id_2}"
+  }
+
   health_check {
     healthy_threshold = "${var.aws_elb_health_check_healthy_threshold}"
 

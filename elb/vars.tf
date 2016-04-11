@@ -42,6 +42,37 @@ variable "aws_elb_ssl_certificate_id" {
   default     = ""
 }
 
+### TODO(cihangir) is this a general case?
+
+variable "aws_elb_instance_port_2" {
+  description = "(Required) The port on the instance to route to"
+  default     = 8080
+}
+
+variable "aws_elb_instance_protocol_2" {
+  description = "(Required) The protocol to use to the instance. "
+  default     = "http"
+
+  # http, https, tcp, ssl
+}
+
+variable "aws_elb_protocol_2" {
+  description = "(Required) The protocol to listen on."
+  default     = "http"
+
+  # http, https, tcp, ssl
+}
+
+variable "aws_elb_port_2" {
+  description = "(Required) The port to listen on for the load balancer"
+  default     = 80
+}
+
+variable "aws_elb_ssl_certificate_id_2" {
+  description = " (Optional) The id of an SSL certificate you have uploaded to AWS IAM. Only valid when instance_protocol and lb_protocol are either HTTPS or SSL"
+  default     = ""
+}
+
 variable "aws_elb_health_check_healthy_threshold" {
   description = "(Required) The number of checks before the instance is declared healthy."
   default     = 2
