@@ -19,7 +19,7 @@ variable "ssh_public_key" {
 
 variable "vpc_cidr_block" {
   description = "The CIDR block for the VPC."
-  default     = "10.0.0.0/16"
+  default     = "172.20.0.0/16"
 }
 
 variable "vpc_enable_dns_support" {
@@ -38,7 +38,7 @@ variable "vpc_enable_classiclink" {
 }
 
 variable "vpc_subnets" {
-  default = "10.0.1.0/24,10.0.2.0/24,10.0.3.0/24"
+  default = "172.20.1.0/24,172.20.2.0/24,172.20.3.0/24"
 }
 
 variable "subnet_map_public_ip_on_launch" {
