@@ -57,7 +57,7 @@ output "aws_subnet_subnet_ids" {
 # security to your VPC.
 resource "aws_network_acl" "acl" {
   vpc_id = "${aws_vpc.vpc.id}"
-  subnet_ids = "${aws_subnet.subnet.*.id}"
+  subnet_ids = ["${aws_subnet.subnet.*.id}"]
 
   tags {
     Name    = "${var.aws_network_acl_prefix}${var.name}"
