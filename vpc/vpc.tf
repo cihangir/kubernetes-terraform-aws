@@ -52,6 +52,56 @@ output "aws_subnet_subnet_ids" {
   value = "${join(",", aws_subnet.subnet.*.id)}"
 }
 
+# Provides an network ACL resource. You might set up network ACLs with rules
+# similar to your security groups in order to add an additional layer of
+# security to your VPC.
+resource "aws_network_acl" "acl" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  subnet_ids = "${aws_subnet.subnet.*.id}"
+
+  tags {
+    Name    = "${var.aws_network_acl_prefix}${var.name}"
+    project = "${var.name}"
+  }
+}
+
+
+output "aws_network_acl_acl_id" {
+  # The ID of the network ACL
+  value = "aws_network_acl.acl.id"
+}
+
+resource "aws_network_acl_rule" "allow_all_ingress" {
+    network_acl_id = "${aws_network_acl.acl.id}"
+    rule_number = 100
+    egress      = false
+    protocol    = "-1"
+    rule_action = "allow"
+    cidr_block  = "0.0.0.0/0"
+    from_port   = 0
+    to_port     = 0
+}
+
+output "aws_network_acl_rule_allow_all_ingress_id" {
+  value = "aws_network_acl_rule.allow_all_ingress.id"
+}
+
+resource "aws_network_acl_rule" "allow_all_egress" {
+    network_acl_id = "${aws_network_acl.acl.id}"
+    rule_number = 100
+    egress      = true
+    protocol    = "-1"
+    rule_action = "allow"
+    cidr_block  = "0.0.0.0/0"
+    from_port   = 0
+    to_port     = 0
+}
+
+output "aws_network_acl_rule_allow_all_egress_id" {
+  value = "aws_network_acl_rule.allow_all_egress.id"
+}
+
+
 # By design, each subnet must be associated with a route table, which specifies
 # the allowed routes for outbound traffic leaving the subnet. Every subnet that
 # you create is automatically associated with the main route table for the VPC.

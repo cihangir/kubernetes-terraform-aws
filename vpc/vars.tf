@@ -75,3 +75,7 @@ variable "aws_internet_gateway_prefix" {
 variable "aws_vpn_gateway_prefix" {
   default = "vgw-"
 }
+
+variable "aws_network_acl_prefix" {
+  default = "acl-"
+}
